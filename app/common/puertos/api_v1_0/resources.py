@@ -64,7 +64,29 @@ class DisenadorListResource(Resource):
         disenador = Disenador(**disenador_dict)
         disenador.save()
         return disenador_schema.dump(disenador), 201
+class DisenadorResource(Resource):
+    def get(self, id):
+        disenador = Disenador.get_by_id(id)
+        if disenador is None:
+            raise ObjectNotFound("Diseñador no encontrado")
+        return disenador_schema.dump(disenador)
 
+    def put(self, id):
+        disenador = Disenador.get_by_id(id)
+        if disenador is None:
+            return {"message": "Diseñador no encontrado"}, 404
+        data = request.get_json()
+        for key, value in data.items():
+            setattr(disenador, key, value)
+        disenador.save()
+        return disenador_schema.dump(disenador)
+
+    def delete(self, id):
+        disenador = Disenador.get_by_id(id)
+        if disenador is None:
+            raise ObjectNotFound("Diseñador no encontrado")
+        disenador.delete()
+        return {"message": "Diseñador eliminado"}, 204
 
 
 class VeleroListResource(Resource):
@@ -78,10 +100,35 @@ class VeleroListResource(Resource):
         velero = Velero(**velero_dict)
         velero.save()
         return velero_schema.dump(velero), 201
+class VeleroResource(Resource):
+    def get(self, id):
+        velero = Velero.get_by_id(id)
+        if velero is None:
+            raise ObjectNotFound("Velero no encontrado")
+        return velero_schema.dump(velero)
+
+    def put(self, id):
+        velero = Velero.get_by_id(id)
+        if velero is None:
+            return {"message": "Velero no encontrado"}, 404
+        data = request.get_json()
+        for key, value in data.items():
+            setattr(velero, key, value)
+        velero.save()
+        return velero_schema.dump(velero)
+
+    def delete(self, id):
+        velero = Velero.get_by_id(id)
+        if velero is None:
+            raise ObjectNotFound("Velero no encontrado")
+        velero.delete()
+        return {"message": "Velero eliminado"}, 204
 
 
 
-api.add_resource(AstilleroListResource, '/api/v1.0/puertos/', endpoint='astilleros_list')
-api.add_resource(AstilleroResource, '/api/v1.0/puertos/<int:id>', endpoint='astillero_detail')
+api.add_resource(AstilleroListResource, '/api/v1.0/astilleros/', endpoint='astilleros_list')
+api.add_resource(AstilleroResource, '/api/v1.0/astilleros/<int:id>', endpoint='astillero_detail')
 api.add_resource(DisenadorListResource, '/api/v1.0/disenadores/', endpoint='disenadores_list')
 api.add_resource(VeleroListResource, '/api/v1.0/veleros/', endpoint='veleros_list')
+api.add_resource(DisenadorResource, '/api/v1.0/disenadores/<int:id>', endpoint='disenador_detail')
+api.add_resource(VeleroResource, '/api/v1.0/veleros/<int:id>', endpoint='velero_detail')

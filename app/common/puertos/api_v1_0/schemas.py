@@ -19,7 +19,7 @@ class VeleroSchema(ma.Schema):
     eslora = fields.Float()
     manga = fields.Float()
     calado = fields.Float()
-    año_fabricacion = fields.Int()
+    ano_fabricacion = fields.Int()
     astillero_id = fields.Int(load_only=True)
     disennador_id = fields.Int(load_only=True)
     astillero = fields.Nested(AstilleroSchema, only=('id', 'nombre'))
