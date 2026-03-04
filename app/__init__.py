@@ -1,8 +1,10 @@
-from flask import Flask, jsonify
+from flask import Flask, app, jsonify
 from app.common.error_handling import ObjectNotFound, AppErrorBaseClass
 from app.db import db
 from app.common.puertos.api_v1_0.resources import puertos_v1_0_bp
 from app.ext import ma, migrate
+from flask_login import LoginManager
+login_manager = LoginManager()
 
 def create_app(settings_module):
     app = Flask(__name__)
@@ -27,7 +29,11 @@ def create_app(settings_module):
     for rule in app.url_map.iter_rules():
         print(f"{rule} -> {rule.methods}")
 
+    login_manager.login_view = 'login'
+    login_manager.init_app(app)
     return app
+
+
 
 def register_error_handlers(app):
     import traceback
