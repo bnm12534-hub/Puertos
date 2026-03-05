@@ -1,25 +1,53 @@
-<h2>Login</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        form { max-width: 400px; margin: auto; }
+        label { font-weight: bold; }
+        input { width: 100%; padding: 8px; margin: 5px 0 10px; }
+        .flash-message { color: red; margin-top: 10px; }
+        .buttons { display: flex; justify-content: space-between; align-items: center; }
+        button, .register-link { padding: 10px 15px; text-decoration: none; }
+        .register-link { background-color: #eee; border: 1px solid #ccc; color: #333; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Login</h2>
 
-<form method="POST">
-    {{ form.hidden_tag() }}
+    <form method="POST">
+        {{ form.hidden_tag() }}
 
-    <p>
-        {{ form.email.label }}<br>
-        {{ form.email() }}
-    </p>
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email(class="form-control") }}
+            {% for error in form.email.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
 
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password() }}
-    </p>
+        <div>
+            {{ form.password.label }}<br>
+            {{ form.password(class="form-control") }}
+            {% for error in form.password.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <button type="submit">Iniciar Sesión</button>
+        <div class="buttons">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('web.register') }}" class="register-link">Registrarse</a>
+        </div>
+    </form>
 
-    <p>{{ form.submit() }}</p>
-</form>
-
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      <p style="color:red;">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="flash-message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

@@ -4,10 +4,16 @@ from app.db import db
 from app.common.puertos.api_v1_0.resources import puertos_v1_0_bp
 from app.ext import ma, migrate
 from flask_login import LoginManager
+from app.web.routes import web_bp
+from app.common.puertos.models import User
 login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
 
+    return User.query.get(int(user_id))
 def create_app(settings_module):
     app = Flask(__name__)
+    app.register_blueprint(web_bp)
     app.config.from_object(settings_module)
     app.config["SECRET_KEY"] = "Koala"
 
@@ -30,7 +36,7 @@ def create_app(settings_module):
     for rule in app.url_map.iter_rules():
         print(f"{rule} -> {rule.methods}")
 
-    login_manager.login_view = 'login'
+    login_manager.login_view = 'web.login'
     login_manager.init_app(app)
     return app
 
