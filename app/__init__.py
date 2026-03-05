@@ -1,4 +1,4 @@
-from flask import Flask, app, jsonify
+from flask import Flask, jsonify
 from app.common.error_handling import ObjectNotFound, AppErrorBaseClass
 from app.db import db
 from app.common.puertos.api_v1_0.resources import puertos_v1_0_bp
@@ -9,6 +9,7 @@ login_manager = LoginManager()
 def create_app(settings_module):
     app = Flask(__name__)
     app.config.from_object(settings_module)
+    app.config["SECRET_KEY"] = "Koala"
 
     # Inicializar extensiones
     db.init_app(app)
